@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAWRENCE - Versatile Visionarist</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            height: 100vh; width: 100vw;
+            overflow: hidden; position: relative;
+            background: #E07010;
+        }
+
+        /* ── Dragon background ── */
+        .bg-dragon {
+            position: fixed; inset: 0; z-index: 0;
+            background-image: url('dragon.jpg');
+            background-size: cover;
+            background-position: center top;
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%,100% { transform: scale(1.00); filter: brightness(0.62) saturate(0.88); }
+            50%      { transform: scale(1.06); filter: brightness(0.74) saturate(1.04); }
+        }
+
+        .bg-overlay {
+            position: fixed; inset: 0; z-index: 1;
+            background: linear-gradient(to bottom,
+                rgba(10,5,0,0.28) 0%,
+                rgba(15,8,0,0.50) 55%,
+                rgba(5,3,0,0.80) 100%);
+        }
+
+        #embers { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+
+        .main-container {
+            position: relative; z-index: 10;
+            height: 100vh; display: flex;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 40px 30px; text-align: center;
+            box-shadow: 0 8px 32px rgba(255,107,53,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+            max-width: 450px; width: 100%; transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255,107,53,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .avatar-container { margin-bottom: 25px; }
+        .avatar-image {
+            width: 150px; height: auto; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease; border: 3px solid rgba(255,255,255,0.3);
+        }
+        .avatar-image:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+
+        .username-container { margin-bottom: 20px; }
+        .username {
+            font-size: 28px; font-weight: 900; color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 2px; position: relative; display: inline-block;
+        }
+        .glitch { position: relative; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; color: #FFFFFF;
+        }
+        .glitch::before { animation: glitch-1 0.5s infinite; clip-path: polygon(0 0,100% 0,100% 45%,0 45%); }
+        .glitch::after  { animation: glitch-2 0.5s infinite; clip-path: polygon(0 80%,100% 20%,100% 100%,0 100%); }
+        @keyframes glitch-1 { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-2px)} 40%,80%{transform:translateX(2px)} }
+        @keyframes glitch-2 { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(2px)} 40%,80%{transform:translateX(-2px)} }
+
+        .bio-container { margin-bottom: 30px; }
+        .bio-text {
+            color: rgba(255,255,255,0.9); font-size: 14px; line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-weight: 500;
+            max-width: 350px; margin: 0 auto;
+        }
+
+        .buttons-container { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .btn {
+            width: 100%; max-width: 250px; padding: 15px 25px; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 700; text-decoration: none; display: inline-flex;
+            align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;
+            text-transform: uppercase; letter-spacing: 1px; position: relative; overflow: hidden;
+        }
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn:hover::before { left: 100%; }
+        .btn-portfolio { background: linear-gradient(135deg,#6366f1,#8b5cf6); color: white; box-shadow: 0 4px 15px rgba(99,102,241,0.3); }
+        .btn-portfolio:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.4); background: linear-gradient(135deg,#5856eb,#7c3aed); }
+        .btn-portfolio:active { transform: translateY(0); }
+        .btn-social { background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+        .btn-x:hover { background: #000; border-color: #000; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .btn-telegram { background: linear-gradient(135deg,#0088cc,#00aced); border-color: transparent; box-shadow: 0 4px 15px rgba(0,136,204,0.3); }
+        .btn-telegram:hover { background: linear-gradient(135deg,#006ba1,#0099d4); transform: translateY(-2px); }
+
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal {
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25); border-radius: 20px;
+            max-width: 420px; width: 100%; padding: 36px 28px; text-align: center;
+            box-shadow: 0 8px 32px rgba(255,107,53,0.3);
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+        }
+        .modal-overlay.active .modal { transform: translateY(0) scale(1); }
+        .modal-close {
+            display: block; margin: 0 auto 22px;
+            background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.35);
+            color: white; font-size: 12px; font-weight: 700; letter-spacing: 2px;
+            padding: 9px 22px; border-radius: 20px; cursor: pointer;
+            transition: background 0.2s; text-transform: uppercase;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.3); }
+        .modal h2 { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); margin-bottom: 16px; text-transform: uppercase; }
+        .modal p  { color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+
+        @media (max-width:768px) { .glass-card{padding:30px 20px;margin:10px;} .avatar-image{width:120px;} .username{font-size:24px;} .bio-text{font-size:13px;} .btn{font-size:14px;padding:12px 20px;} }
+        @media (max-width:480px) { .glass-card{padding:25px 15px;} .avatar-image{width:100px;} .username{font-size:20px;letter-spacing:1px;} .bio-text{font-size:12px;} }
+    </style>
+</head>
+<body>
+
+    <div class="bg-dragon" id="bgDragon"></div>
+    <div class="bg-overlay"></div>
+    <canvas id="embers"></canvas>
+
+    <div class="main-container">
+        <div class="glass-card">
+            <div class="avatar-container">
+                <img src="avatar.png" alt="LAWRENCE" class="avatar-image">
+            </div>
+            <div class="username-container">
+                <h1 class="username glitch" data-text="LAWRENCE">LAWRENCE</h1>
+            </div>
+            <div class="bio-container">
+                <p class="bio-text">Versatile Visionarist || Vibe Coder || Intern || Fun Educator &amp; Content Specialist || Multi-chain Maxi || AI &amp; Blockchain Security Enthusiast</p>
+            </div>
+            <div class="buttons-container">
+                <a href="https://bridge-app-sepia.vercel.app/p/dedonfxofficial" target="_blank" class="btn btn-portfolio" id="portfolioBtn">My Portfolio</a>
+                <a href="https://x.com/DEDONFXOFFICIAL" target="_blank" class="btn btn-social btn-x">X</a>
+                <a href="https://t.me/Dedonfxofficial" target="_blank" class="btn btn-social btn-telegram">TELEGRAM</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Embers
+        const canvas = document.getElementById('embers');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+
+        class Ember {
+            constructor() { this.reset(true); }
+            reset(init) {
+                this.x=Math.random()*W; this.y=init?Math.random()*H:H+10;
+                this.r=Math.random()*1.8+0.4; this.vy=-(Math.random()*1.0+0.25);
+                this.vx=(Math.random()-0.5)*0.4; this.life=1;
+                this.decay=Math.random()*0.005+0.002;
+                this.hue=Math.random()>0.5?'#FF8C00':'#FF4400';
+                this.w=Math.random()*Math.PI*2; this.ws=Math.random()*0.03+0.01;
+            }
+            update() {
+                this.w+=this.ws; this.x+=this.vx+Math.sin(this.w)*0.3; this.y+=this.vy;
+                this.life-=this.decay; if(this.life<=0||this.y<-10) this.reset(false);
+            }
+            draw() {
+                ctx.save(); ctx.globalAlpha=this.life*0.75; ctx.fillStyle=this.hue;
+                ctx.shadowBlur=5; ctx.shadowColor=this.hue;
+                ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill(); ctx.restore();
+            }
+        }
+
+        const embers = Array.from({length:45},()=>new Ember());
+        let running = true;
+        function loop() { if(!running) return; ctx.clearRect(0,0,W,H); embers.forEach(e=>{e.update();e.draw();}); requestAnimationFrame(loop); }
+        loop();
+
+        // Dragon parallax
+        const bgDragon = document.getElementById('bgDragon');
+        document.addEventListener('mousemove', e => {
+            const rx = (e.clientX/window.innerWidth -0.5)*10;
+            const ry = (e.clientY/window.innerHeight-0.5)*7;
+            bgDragon.style.transform = `scale(1.06) translate(${rx}px,${ry}px)`;
+        });
+
+        // Eye blink overlay — two absolutely positioned divs synced to image eye positions
+        const eyeOverlay = document.createElement('div');
+        eyeOverlay.style.cssText = 'position:fixed;inset:0;z-index:1;pointer-events:none;';
+
+        function makeEye(leftPct, topPct) {
+            const e = document.createElement('div');
+            e.style.cssText = `
+                position:absolute;
+                left:${leftPct}%; top:${topPct}%;
+                width:5%; aspect-ratio:1.6/1;
+                transform:translate(-50%,-50%);
+                border-radius:50%;
+                background:radial-gradient(ellipse, #FFB300 0%, #FF6600 50%, transparent 80%);
+                mix-blend-mode:screen;
+                animation: eyeGlow 8s ease-in-out infinite;
+            `;
+            return e;
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes eyeGlow {
+                0%,100%{opacity:0.80;filter:blur(1px);}
+                50%{opacity:1.0;filter:blur(0px);}
+            }
+        `;
+        document.head.appendChild(style);
+
+        const leftEye  = makeEye(35, 40);
+        const rightEye = makeEye(65, 40);
+
+        // Blink lids
+        function makeLid(leftPct, topPct) {
+            const l = document.createElement('div');
+            l.style.cssText = `
+                position:absolute;
+                left:${leftPct}%; top:${topPct}%;
+                width:6%; aspect-ratio:1.8/1;
+                transform:translate(-50%,-50%);
+                border-radius:50%;
+                background:#C08040;
+                opacity:0;
+                transition:opacity 80ms ease-in;
+            `;
+            return l;
+        }
+
+        const lidL = makeLid(35, 40);
+        const lidR = makeLid(65, 40);
+
+        eyeOverlay.appendChild(leftEye);
+        eyeOverlay.appendChild(rightEye);
+        eyeOverlay.appendChild(lidL);
+        eyeOverlay.appendChild(lidR);
+        document.body.appendChild(eyeOverlay);
+
+        function blink() {
+            const dur = 110 + Math.random() * 120;
+            lidL.style.transition = lidR.style.transition = `opacity ${dur*0.45}ms ease-in`;
+            lidL.style.opacity = lidR.style.opacity = '1';
+            setTimeout(() => {
+                lidL.style.transition = lidR.style.transition = `opacity ${dur*0.55}ms ease-out`;
+                lidL.style.opacity = lidR.style.opacity = '0';
+            }, dur * 0.45);
+            setTimeout(blink, 3000 + Math.random()*3500 + (Math.random()>0.65 ? 2500 : 0));
+        }
+        setTimeout(blink, 1800 + Math.random()*2000);
+
+        // Portfolio button click feel
+        const portfolioBtn=document.getElementById('portfolioBtn');
+        portfolioBtn.addEventListener('click', function(){ this.style.transform='scale(0.95)'; setTimeout(()=>{this.style.transform='';},150); });
+
+        // Glitch
+        const glitchEl=document.querySelector('.glitch');
+        function startGlitch(){ glitchEl.style.animation='none'; setTimeout(()=>{glitchEl.style.animation='';},10); }
+        setInterval(startGlitch,5000);
+
+        // Card hover
+        const glassCard=document.querySelector('.glass-card');
+        glassCard.addEventListener('mouseenter',function(){ this.style.transform='translateY(-8px) scale(1.02)'; });
+        glassCard.addEventListener('mouseleave',function(){ this.style.transform=''; });
+
+        // Avatar
+        const avatar=document.querySelector('.avatar-image');
+        avatar.addEventListener('click',function(){ startGlitch(); this.style.transform='scale(1.1) rotate(5deg)'; setTimeout(()=>{this.style.transform='';},300); });
+
+        // Button feel
+        document.querySelectorAll('.btn').forEach(btn=>{
+            btn.addEventListener('mousedown',function(){ this.style.transform='scale(0.98)'; });
+            btn.addEventListener('mouseup',function(){ this.style.transform=''; });
+            btn.addEventListener('mouseleave',function(){ this.style.transform=''; });
+        });
+
+        // Keyboard
+        document.addEventListener('keydown',e=>{ if(e.key.toLowerCase()==='g') startGlitch(); if(e.key.toLowerCase()==='p') portfolioBtn.click(); });
+
+        // Tab visibility
+        document.addEventListener('visibilitychange',()=>{ running=!document.hidden; if(running) loop(); });
+
+        // Entrance
+        const card=document.querySelector('.glass-card');
+        card.style.opacity='0'; card.style.transform='translateY(50px) scale(0.9)';
+        setTimeout(()=>{ card.style.transition='all 0.8s cubic-bezier(0.25,0.46,0.45,0.94)'; card.style.opacity='1'; card.style.transform='translateY(0) scale(1)'; },100);
+    });
+    </script>
+</body>
+</html>
